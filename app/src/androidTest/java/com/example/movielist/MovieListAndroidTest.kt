@@ -18,7 +18,6 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.P])
 class MovieListAndroidTest {
     private lateinit var database: MovieRoomDatabase
     private lateinit var item: MovieItem
@@ -36,8 +35,8 @@ class MovieListAndroidTest {
         item = MovieItem(
             0,
             20,
-        "https:\/\/myanimelist.net\/anime\/20\/Naruto",
-        "https:\/\/cdn.myanimelist.net\/images\/anime\/13\/17405.jpg?s=59241469eb470604a792add6fbe7cce6",
+        "https://myanimelist.net/anime/20/Naruto",
+        "https://cdn.myanimelist.net/images/anime/13/17405.jpg?s=59241469eb470604a792add6fbe7cce6",
         "Naruto",
         false,
         "Moments prior to Naruto Uzumaki's birth, a huge demon known as the Kyuubi, the Nine-Tailed Fox, attacked Konohagakure, the Hidden Leaf Village, and wreaked havoc. In order to put an end to the Kyuubi'...",
