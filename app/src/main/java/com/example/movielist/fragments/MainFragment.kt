@@ -33,12 +33,11 @@ class MainFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        viewModel.loadMovieList(keyword)
-
         setupObservers()
 
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
+
 
         binding.svKeyword.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -50,6 +49,13 @@ class MainFragment : Fragment() {
                 return false
             }
         })
+
+        binding.svKeyword.isIconified = false // Expand it
+        binding.svKeyword.setQuery(keyword, false) // true if you want to submit, otherwise false
+        binding.svKeyword.clearFocus()
+
+        viewModel.loadMovieList(keyword)
+
         return binding.root
     }
 
