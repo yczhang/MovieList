@@ -31,6 +31,10 @@ using JSON
 Yichun-> fully support
  Show good coding style and comments
  Show an understanding of the MVVM design pattern
+
+
+
+Tested on Simulator an Pixel 2 XL
  Show an understanding of object-oriented design patterns
 
 Do your best to make sure the code is error free and compiles.
