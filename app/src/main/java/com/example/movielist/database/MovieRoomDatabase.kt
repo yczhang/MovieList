@@ -11,8 +11,8 @@ import com.example.movielist.models.MovieItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [MovieItem::class], version = 1, exportSchema = false)
-abstract class MovieRoomDatabase : RoomDatabase(){
+@Database(entities = [MovieItem::class], version = 1)
+abstract class MovieRoomDatabase : RoomDatabase() {
 
     abstract fun movieDao(): MovieDao
 
@@ -29,25 +29,23 @@ abstract class MovieRoomDatabase : RoomDatabase(){
     }
 
     companion object {
-            @Volatile
-            private var INSTANCE: MovieRoomDatabase? = null
+        @Volatile
+        private var INSTANCE: MovieRoomDatabase? = null
 
-            fun getDatabase(context: Context, scope: CoroutineScope): MovieRoomDatabase {
-                val tempInstance = INSTANCE
-                if (tempInstance != null) {
-                    return tempInstance
-                }
-                synchronized(this) {
-                    val instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        MovieRoomDatabase::class.java,
-                        "movie_database"
-                    )
-                        .addCallback(MovieDatabaseCallback(scope))
-                        .build()
-                    INSTANCE = instance
-                    return instance
-                }
+        fun getDatabase(context: Context, scope: CoroutineScope): MovieRoomDatabase {
+            val tempInstance = INSTANCE
+            if (tempInstance != null) {
+                return tempInstance
+            }
+            synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    MovieRoomDatabase::class.java,
+                    "movie_database"
+                ).addCallback(MovieDatabaseCallback(scope)).build()
+                INSTANCE = instance
+                return instance
             }
         }
+    }
 }

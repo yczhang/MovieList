@@ -11,11 +11,11 @@ class MovieRepository (private val movieDao: MovieDao){
         movieDao.insert(item)
     }
 
-    fun getAllOffer(): List<MovieItem> {
+    fun getAllMovies(): List<MovieItem> {
         return movieDao.getMovieList()
     }
 
-    fun dellAllOffer()
+    fun dellAllMovies()
     {
         movieDao.deleteAll()
     }

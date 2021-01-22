@@ -6,4 +6,8 @@
         <item name="cornerSizeBottomRight">10dp</item>
         <item name="cornerSizeBottomLeft">10dp</item>
     </style>
+
+    <style name="SearchViewStyle" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:editTextColor">@color/black</item>
+    </style>
 </resources>

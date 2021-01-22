@@ -9,7 +9,7 @@ import com.example.movielist.models.MovieItem
 @Dao
 interface MovieDao {
 
-    @Query("select * from movie_table")
+    @Query("SELECT * FROM movie_table")
     fun getMovieList(): List<MovieItem>
 
     @Insert

@@ -13,7 +13,6 @@ data class MovieListReponse (
 @Entity(tableName = "movie_table")
 data class MovieItem(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "table_id")
     val table_id: Int = 0,
 
     @ColumnInfo(name = "mal_id")
@@ -59,6 +58,7 @@ data class MovieItem(
     @ColumnInfo(name = "end_date")
     @Json(name = "end_date")
     val end_date:String?,
+
     @ColumnInfo(name = "members")
     @Json(name = "members")
     val members:Int?,
