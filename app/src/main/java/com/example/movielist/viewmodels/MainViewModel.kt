@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _isReady = MutableLiveData<Boolean>(false)
+    private val _isReady = MutableLiveData<Boolean>()
 
     private var movieResponse: MovieListReponse? = null
 
@@ -44,7 +44,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     public fun loadMovieList(keyword:String)
     {
         coroutineScope.launch {
-
                 val request = MovieListAPI.retrofitService.fetch(keyword)
                 try {
                     val result = request.await()
@@ -61,8 +60,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             }
 
                             items = repository.getAllMovies()
+
+                            coroutineScope.launch{
+                                _isReady.value = true
+                            }
                         }
-                        _isReady.value = true
+
 
                     } else {
                         _isReady.value = false

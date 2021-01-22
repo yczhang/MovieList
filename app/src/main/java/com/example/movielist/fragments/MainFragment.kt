@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,10 +16,9 @@ import com.example.movielist.R
 import com.example.movielist.databinding.MainFragmentBinding
 import com.example.movielist.viewmodels.MainViewModel
 import com.example.movielist.views.MovieListAdapter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class MainFragment : Fragment() {
 
@@ -53,17 +53,11 @@ class MainFragment : Fragment() {
         })
 
         binding.svKeyword.isIconified = false
-        binding.svKeyword.setQuery(keyword, false)
+        binding.svKeyword.setQuery(keyword, true)
         binding.svKeyword.clearFocus()
 
         setupObservers()
-
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadMovieList(keyword)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -74,19 +68,19 @@ class MainFragment : Fragment() {
     private fun setupObservers()
     {
         viewModel.isReady.observe(this.viewLifecycleOwner, Observer {
-            if (it)
-            {
+            if (it) {
                 binding.rvList.apply {
-                    layoutManager = LinearLayoutManager(activity)
-                    adapter =
-                        MovieListAdapter(
-                            viewModel.getItems()
-                        )
-                }
-            }
-            else
-            {
+                        layoutManager = LinearLayoutManager(activity)
+                        adapter =
+                                MovieListAdapter(
+                                        viewModel.getItems()
+                                )
+                    }
 
+                binding.svKeyword.clearFocus()
+            }
+            else {
+                Toast.makeText(requireContext(), "Movie Loading Failed.  Please check your network connection, and try again", Toast.LENGTH_LONG).show()
             }
         })
     }
