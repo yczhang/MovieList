@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movielist.R
+import com.example.movielist.helpers.DateTools
 import com.example.movielist.models.MovieItem
 import com.squareup.picasso.Picasso
 import org.w3c.dom.Text
@@ -42,8 +43,8 @@ class MovieItemViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     {
         title?.text = item.title
         desc?.text = item.synopsis
-        start_date?.text = "Start: " + item.start_date
-        end_date?.text = "End: " + item.end_date
+        start_date?.text = "Start: " + DateTools.convertTime(item.start_date)
+        end_date?.text = "End: " + DateTools.convertTime(item.end_date)
         type?.text = item.type
         rated?.text = "Rated:" + item.rated
         score?.text = "Score:" + item.score.toString()
