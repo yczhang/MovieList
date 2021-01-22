@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,19 +25,31 @@ class MainFragment : Fragment() {
 
     private lateinit var binding : MainFragmentBinding
 
+    private var keyword = "naruto"
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container,false)
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        viewModel.loadMovieList("")
+        viewModel.loadMovieList(keyword)
 
         setupObservers()
 
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
+        binding.svKeyword.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                viewModel.loadMovieList(query)
+                return false
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+
+                return false
+            }
+        })
         return binding.root
     }
 

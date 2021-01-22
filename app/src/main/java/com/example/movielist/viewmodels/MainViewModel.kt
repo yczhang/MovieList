@@ -29,11 +29,10 @@ class MainViewModel : ViewModel() {
 
     }
 
-    public fun loadMovieList(keyword:String?)
+    public fun loadMovieList(keyword:String)
     {
         coroutineScope.launch {
-
-            val request = MovieListAPI.retrofitService.fetch()
+            val request = MovieListAPI.retrofitService.fetch(keyword)
 
             try {
               val result = request.await()

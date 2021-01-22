@@ -4,14 +4,11 @@ import com.example.movielist.models.MovieListReponse
 import com.example.movielist.network.getRetrofit
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface MovieListAPIService {
-    @GET("/v3/search/anime?q=naruto")
-    fun fetch(): Deferred<Response<MovieListReponse>>
+    @GET("/v3/search/anime")
+    fun fetch(@Query("q") keyword:String): Deferred<Response<MovieListReponse>>
 }
 
 object MovieListAPI {
