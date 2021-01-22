@@ -6,11 +6,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.movielist.R
 import com.example.movielist.api.MovieListAPI
 import com.example.movielist.database.MovieRepository
 import com.example.movielist.database.MovieRoomDatabase
 import com.example.movielist.models.MovieItem
 import com.example.movielist.models.MovieListReponse
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -32,15 +34,46 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
     private val coroutineDatabaseScope = CoroutineScope(viewModelJob + Dispatchers.IO)
 
-    private val repository: MovieRepository
+    private var repository: MovieRepository? = null
 
     init {
-        val movieDao = MovieRoomDatabase.getDatabase(application.applicationContext, coroutineDatabaseScope).movieDao()
 
-        repository = MovieRepository(movieDao)
-
+        application.applicationContext?.let {
+            val movieDao = MovieRoomDatabase.getDatabase(it, coroutineDatabaseScope).movieDao()
+            repository = MovieRepository(movieDao)
+        }
     }
 
+    public fun loadLocalMovieList(resourceID:Int)
+    {
+        try {
+            val inputStream = getApplication<Application>().resources.openRawResource(R.raw.sampledata)
+
+            val jsonStr = inputStream.bufferedReader().use {
+                it.readText()
+            }
+
+            movieResponse = Gson().fromJson<MovieListReponse>(jsonStr, MovieListReponse::class.java)
+
+            coroutineDatabaseScope.launch {
+
+                repository?.dellAllMovies()
+
+                movieResponse?.results?.let {
+                    repository?.insertAll(it)
+                }
+
+                items = repository?.getAllMovies()
+
+                coroutineScope.launch {
+                    _isReady.value = true
+                }
+            }
+        } catch (e: Exception)
+        {
+
+        }
+    }
     public fun loadMovieList(keyword:String)
     {
         coroutineScope.launch {
@@ -53,13 +86,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                         coroutineDatabaseScope.launch {
 
-                            repository.dellAllMovies()
+                            repository?.dellAllMovies()
 
                             movieResponse?.results?.let {
-                                repository.insertAll(it)
+                                repository?.insertAll(it)
                             }
 
-                            items = repository.getAllMovies()
+                            items = repository?.getAllMovies()
 
                             coroutineScope.launch{
                                 _isReady.value = true
@@ -71,6 +104,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         _isReady.value = false
                     }
                 } catch (e: Exception) {
+
                 }
             }
     }
@@ -78,5 +112,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun getItems() : List<MovieItem>
     {
         return items ?: listOf()
+    }
+
+    fun getItemsCount() : Int
+    {
+        return items?.size ?: 0
+    }
+
+    fun getItem(index:Int): MovieItem?
+    {
+        return items?.get(index)
     }
 }
