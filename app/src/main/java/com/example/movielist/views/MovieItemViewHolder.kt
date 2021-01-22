@@ -69,5 +69,4 @@ class MovieItemViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         p0?.let { startActivity(it?.context,intent,null) }
     }
 
-
 }
